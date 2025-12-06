@@ -29,20 +29,68 @@ document.querySelectorAll('[data-route]').forEach(btn=> btn.addEventListener('cl
 navButtons.forEach(b=> b.addEventListener('click', ()=> navigate(b.dataset.route)));
 
 // Floating window manager
+// REPLACE existing openFloating(...) with the following improved function
 function openFloating(title, html){
   const tpl = document.getElementById('floating-template');
   const node = tpl.content.firstElementChild.cloneNode(true);
+
   node.querySelector('.fw-title').textContent = title;
   node.querySelector('.fw-body').innerHTML = html;
+
+  // start hidden so we can measure without showing clipped content
+  node.style.visibility = 'hidden';
+  node.style.opacity = '0';
+  node.style.left = '0px';
+  node.style.top = '0px';
+  node.style.transform = 'none'; // we'll position absolutely via left/top
   floatContainer.appendChild(node);
-  node.style.left = Math.random()*20 + 10 + '%';
-  node.style.top = Math.random()*20 + 10 + '%';
-  node.querySelector('.fw-close').addEventListener('click', ()=> node.remove());
-  node.querySelector('.fw-minimize').addEventListener('click', ()=> node.style.display = 'none');
-  // make draggable (pointer events)
-  makeDraggable(node);
+
+  // ensure it has a size (force layout)
+  requestAnimationFrame(()=> {
+    // measure
+    const winRect = {
+      w: window.innerWidth,
+      h: window.innerHeight
+    };
+    const rect = node.getBoundingClientRect();
+    const nw = rect.width;
+    const nh = rect.height;
+
+    // ideal center position
+    let left = (winRect.w - nw) / 2;
+    let top  = (winRect.h - nh) / 2;
+
+    // add small margin from edges
+    const M = 12;
+    if(left < M) left = M;
+    if(top  < M) top = M;
+    if(left + nw + M > winRect.w) left = Math.max(M, winRect.w - nw - M);
+    if(top  + nh + M > winRect.h) top  = Math.max(M, winRect.h - nh - M);
+
+    // apply final position using px coordinates
+    node.style.left = Math.round(left) + 'px';
+    node.style.top  = Math.round(top)  + 'px';
+    node.style.position = 'fixed';
+    node.style.maxHeight = (winRect.h - 2*M) + 'px'; // keep inside screen
+    node.style.overflow = 'auto';
+
+    // show it
+    node.style.visibility = 'visible';
+    node.style.opacity = '1';
+    node.style.transition = 'transform .15s, opacity .12s';
+    node.style.transform = 'translateY(0)';
+
+    // attach close/minimize handlers (existing code uses same selectors)
+    node.querySelector('.fw-close').addEventListener('click', ()=> node.remove());
+    node.querySelector('.fw-minimize').addEventListener('click', ()=> node.style.display = 'none');
+
+    // make draggable
+    makeDraggable(node);
+  });
+
   return node;
 }
+
 
 function makeDraggable(el){
   let startX=0, startY=0, origX=0, origY=0, dragging=false;
