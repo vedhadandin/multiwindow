@@ -20,6 +20,27 @@ main{flex:1;position:relative;padding-bottom:72px} /* reserve for bottom-nav */
 .nav-btn{flex:1;padding:10px;border-radius:10px;border:none;background:#f3f7f6;font-weight:700}
 .nav-btn.active{background:linear-gradient(90deg,var(--accent2),var(--accent));color:white}
 .float-container{position:fixed;left:12px;right:12px;bottom:80px;top:12px;pointer-events:none;overflow:hidden}
+/* Floating window improvements */
+.float-container { position: fixed; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none; z-index: 9999; }
+.floating-window {
+  pointer-events: auto;
+  position: fixed; /* position set by JS now */
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 36px);
+  max-width: 420px;
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(2,6,23,0.25);
+  transition: opacity .12s, transform .15s;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10000;
+}
+
+/* make header drag hits easier on small screens */
+.fw-header { touch-action: none; -webkit-user-select:none; user-select:none; }
+
 .floating-window{pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:92%;max-width:420px;border-radius:12px;background:var(--card);box-shadow:0 14px 40px rgba(2,6,23,0.2);overflow:hidden}
 .fw-header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f3faf9;border-bottom:1px solid #eef6f3}
 .fw-title{font-weight:700}
