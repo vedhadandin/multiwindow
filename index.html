@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Healthy Habit Tracker — Multiwindow</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#0ea5a4"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon-192.png" class="logo" alt="logo"/>
+      <div>
+        <h1>Healthy Habit</h1>
+        <p class="muted">Track • Remind • Improve</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="darkToggle" class="icon-btn" title="Toggle theme">🌓</button>
+      <button id="installBtn" class="btn primary" style="display:none">Install</button>
+    </div>
+  </header>
+
+  <main id="app-shell">
+    <!-- Views -->
+    <div id="views" class="views">
+      <section id="view-home" class="view active">
+        <div class="card">
+          <h2>Welcome</h2>
+          <p class="muted">Quick access to your habits and today's progress.</p>
+          <div class="row">
+            <button class="btn" data-route="habits">Go to Habits</button>
+            <button class="btn" data-route="stats">View Stats</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-habits" class="view">
+        <div class="card">
+          <div class="view-header">
+            <h2>Habits</h2>
+            <button id="openAddFloating" class="btn">+ New</button>
+          </div>
+          <div id="habitsList" class="list"></div>
+          <p id="noHabits" class="muted">No habits yet. Add one.</p>
+        </div>
+      </section>
+
+      <section id="view-stats" class="view">
+        <div class="card">
+          <h2>Stats</h2>
+          <canvas id="weekChart" width="500" height="120"></canvas>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="card">
+          <h2>Settings</h2>
+          <div class="row">
+            <button id="exportBtn" class="btn">Export</button>
+            <button id="importBtn" class="btn">Import</button>
+            <button id="clearBtn" class="btn">Clear All</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Floating windows container -->
+    <div id="float-container" class="float-container"></div>
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-btn" data-route="home">Home</button>
+      <button class="nav-btn" data-route="habits">Habits</button>
+      <button class="nav-btn" data-route="stats">Stats</button>
+      <button class="nav-btn" data-route="settings">Settings</button>
+    </nav>
+  </main>
+
+  <footer class="foot">
+    <small class="muted">Install on your phone for native app feel. Background push requires server.</small>
+  </footer>
+</div>
+
+<!-- Floating window template for JS to clone -->
+<template id="floating-template">
+  <div class="floating-window draggable">
+    <div class="fw-header">
+      <strong class="fw-title">Window</strong>
+      <div class="fw-actions">
+        <button class="fw-minimize">—</button>
+        <button class="fw-close">✕</button>
+      </div>
+    </div>
+    <div class="fw-body"></div>
+  </div>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>

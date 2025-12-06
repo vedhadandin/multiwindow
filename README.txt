@@ -1,0 +1,1 @@
+This PWA includes an in-app multi-window system (floating windows) and SPA navigation. Host on GitHub Pages for installability.
